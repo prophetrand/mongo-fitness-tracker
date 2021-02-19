@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Workout = require("../models/workout.js");
+const path = require("path");
 
 // With this route included (currently), the Continue Workout button on index.html is replaced with the text "You have not created a workout yet!" This is expected based on the function renderNoWorkoutText() in public/workout.js. Commenting out this route will therefore make the Continue Workout button reappear even when no workouts are present.
 router.get("/api/workouts", (req, res) => {
@@ -74,11 +75,12 @@ router.get("/api/workouts/range", (req, res) => {
 });
 
 router.get("/stats", (req, res) => {
-
+    res.sendFile(path.join(__dirname, "/../public/stats.html"));
 });
 
 router.get("/exercise", (req, res) => {
     // route for New Workout
+    res.sendFile(path.join(__dirname, "/../public/exercise.html"));
 });
 
 router.get("/exercise?", (req, res) => {
