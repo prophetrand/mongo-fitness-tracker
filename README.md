@@ -35,7 +35,9 @@ This web application is hosted on Heroku, and can be [accessed here](https://eni
 I utilized a backend Mongoose ORM to link a MongoDB database to Express GET/POST/PUT route handling. The HTML and API routes defined in `/routes/routes.js` are referenced by the frontend JavaScript that populates the HTML and handles event listening.
 
 ## Code Snippets 
+The following code snippet shows an API route that gave me a good bit of trouble until I had sufficiently scoured the documentation for a solution. When the route is hit by `stats.js`, the request is expecting an array of objects received from a query to the Workout model. I used the .aggregate() method on the Workout model in order to utilize the Mongoose `$set` method, which adds a new field to a document while preserving all of the documents initial input fields in the promise. Within $set, I defined the key totalDuration and set it equal to the `$sum` of the *duration* ley values for each object in the *exercises* field.
 
+From the resulting promise, I used the Mongoose .sort() method with the parameter of {day: 1} to sort the documents by day in ascending order. This query is then limited to the last seven results with the .limit() method. The resulting data that has been sorted and limited is finally returned as JSON to `stats.js` where the route was called.
 
 ```javascript
 router.get("/api/workouts/range", (req, res) => {
@@ -57,10 +59,13 @@ router.get("/api/workouts/range", (req, res) => {
 ```
 
 ## Screenshots
-Example of the app in the browser
+Example of the stats page:
 
-![example_home](./public/assets/app_example.PNG)
+![example-stats](./assets/example-stats.PNG)
 
+Example of adding a new exercise:
+
+![example-exercise](./assets/example-exercise.PNG)
 ---
 
 ## Acknowledgments
