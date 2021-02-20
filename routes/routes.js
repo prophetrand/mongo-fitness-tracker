@@ -3,7 +3,11 @@ const Workout = require("../models/workout.js");
 const path = require("path");
 
 router.get("/api/workouts", (req, res) => {
-    Workout.find({})
+    Workout.aggregate([{
+        $set: {
+            totalDuration: { $sum: "$exercises.duration" }
+        }
+    }])
         .then(data => {
             res.json(data);
         })
@@ -16,7 +20,7 @@ router.post("/api/workouts", ({ body }, res) => {
     console.log("POST route: api/workouts");
     Workout.create(body)
         .then(data => {
-            res.json({_id: data._id});
+            res.json({ _id: data._id });
             console.log("Success!");
         })
         .catch(err => {
@@ -25,7 +29,6 @@ router.post("/api/workouts", ({ body }, res) => {
         })
 });
 
-// { $set: {totalDuration: {$sum(): } } }
 // predicting input values from req.body based on PUT request defined in api.js, and made in exercise.js
 router.put("/api/workouts/:id", (req, res) => {
     console.log("PUT /api/workouts/:id");
@@ -50,14 +53,14 @@ router.put("/api/workouts/:id", (req, res) => {
 router.get("/api/workouts/range", (req, res) => {
     // this is called in stats.js, and the corresponding function is defined in api.js
     // sort by day, ascending, then return the data as JSON
-    Workout.find({}).sort({day: 1}).limit(7)
-      .then(data => {
-        res.json(data);
-      })
-      .catch(err => {
-        console.log(err);
-        res.json(err);
-      });
+    Workout.find({}).sort({ day: 1 }).limit(7)
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        });
 });
 
 router.get("/stats", (req, res) => {
