@@ -13,61 +13,38 @@ router.get("/api/workouts", (req, res) => {
         });
 });
 
-router.post("api/workouts", ({ body }, res) => {
+router.post("/api/workouts", ({ body }, res) => {
+    console.log("POST route: api/workouts");
     Workout.create(body)
         .then(data => {
-            res.json(data);
+            res.json({_id: data._id});
+            console.log("Success!");
         })
         .catch(err => {
             res.status(400).json(err);
+            console.log("ERROR", err);
         })
 });
 
 // predicting input values from req.body based on PUT request defined in api.js, and made in exercise.js
 router.put("/api/workouts/:id", (req, res) => {
-    if (req.body.type === "cardio") {
-        Workout.updateOne(
-            {
-                _id: req.params.id
-            },
-            {
-                type: req.body.type,
-                name: req.body.name,
-                distance: req.body.distance,
-                duration: req.body.duration
-
-            },
-            (err, data) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json(data);
-                }
+    console.log("PUT /api/workouts/:id");
+    console.log(req.body);
+    Workout.updateOne(
+        {
+            _id: req.params.id
+        },
+        { $push: { exercises: req.body } },
+        (err, data) => {
+            if (err) {
+                console.log(err);
+                res.send(err);
+            } else {
+                console.log("Success!");
+                res.json(data);
             }
-        );
-    } else if (req.body.type === "resistance") {
-        Workout.updateOne(
-            {
-                _id: req.params.id
-            },
-            {
-                type: req.body.type,
-                name: req.body.name,
-                weight: req.body.weight,
-                sets: req.body.sets,
-                reps: req.body.reps,
-                duration: req.body.duration
-            },
-            (err, data) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json(data);
-                }
-            }
-        );
-    }
-    
+        }
+    );
 });
 
 router.get("/api/workouts/range", (req, res) => {
