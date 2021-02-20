@@ -1,7 +1,7 @@
 # Mongo Fitness Tracker
 
 ## Description
-This [web application](https://enigmatic-ravine-40935.herokuapp.com/) deployed on Heroku allows users to save multiple workouts to a MongoDB Atlas database.
+This [web application](https://enigmatic-ravine-40935.herokuapp.com/) deployed on Heroku allows users to save multiple workouts to a MongoDB Atlas database. Users can save Resistance exercises and/or Cardio exercises, each of which have different form fields for simple stats to be included with the entry.
 
 
 ## Table of Contents
