@@ -1,3 +1,4 @@
+// This file is imported into index.html
 init();
 
 async function init() {

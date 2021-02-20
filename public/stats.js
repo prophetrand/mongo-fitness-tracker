@@ -1,3 +1,4 @@
+// This file is imported in stats.html
 function generatePalette() {
   const arr = [
     '#003f5c',

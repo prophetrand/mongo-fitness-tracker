@@ -1,3 +1,4 @@
+// This file is imported into every HTML file
 const API = {
   async getLastWorkout() {
     let res;

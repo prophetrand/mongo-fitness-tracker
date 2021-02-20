@@ -1,3 +1,4 @@
+// This file is imported into index.html
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
   console.log("Last workout:", lastWorkout);
