@@ -37,7 +37,9 @@ router.put("/api/workouts/:id", (req, res) => {
         {
             _id: req.params.id
         },
-        { $push: { exercises: req.body } },
+        { 
+            $push: { exercises: req.body } 
+        },
         (err, data) => {
             if (err) {
                 console.log(err);
@@ -53,7 +55,11 @@ router.put("/api/workouts/:id", (req, res) => {
 router.get("/api/workouts/range", (req, res) => {
     // this is called in stats.js, and the corresponding function is defined in api.js
     // sort by day, ascending, then return the data as JSON
-    Workout.find({}).sort({ day: 1 }).limit(7)
+    Workout.aggregate([{
+        $set: {
+            totalDuration: { $sum: "$exercises.duration" }
+        }
+    }]).sort({ day: 1 }).limit(7)
         .then(data => {
             res.json(data);
         })
