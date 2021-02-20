@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Workout = require("../models/workout.js");
 const path = require("path");
 
-// With this route included (currently), the Continue Workout button on index.html is replaced with the text "You have not created a workout yet!" This is expected based on the function renderNoWorkoutText() in public/workout.js. Commenting out this route will therefore make the Continue Workout button reappear even when no workouts are present.
 router.get("/api/workouts", (req, res) => {
     Workout.find({})
         .then(data => {
@@ -26,6 +25,7 @@ router.post("/api/workouts", ({ body }, res) => {
         })
 });
 
+// { $set: {totalDuration: {$sum(): } } }
 // predicting input values from req.body based on PUT request defined in api.js, and made in exercise.js
 router.put("/api/workouts/:id", (req, res) => {
     console.log("PUT /api/workouts/:id");
@@ -48,7 +48,16 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.get("/api/workouts/range", (req, res) => {
-    
+    // this is called in stats.js, and the corresponding function is defined in api.js
+    // sort by day, ascending, then return the data as JSON
+    Workout.find({}).sort({day: 1}).limit(7)
+      .then(data => {
+        res.json(data);
+      })
+      .catch(err => {
+        console.log(err);
+        res.json(err);
+      });
 });
 
 router.get("/stats", (req, res) => {
@@ -58,10 +67,6 @@ router.get("/stats", (req, res) => {
 router.get("/exercise", (req, res) => {
     // route for New Workout
     res.sendFile(path.join(__dirname, "/../public/exercise.html"));
-});
-
-router.get("/exercise?", (req, res) => {
-    // route for Continue Workout
 });
 
 module.exports = router;

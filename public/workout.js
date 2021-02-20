@@ -20,6 +20,7 @@ async function initWorkout() {
   }
 }
 
+// this function expects an array of "exercises," and requires the Mongoose aggregate structure for to be defined
 function tallyExercises(exercises) {
   const tallied = exercises.reduce((acc, curr) => {
     if (curr.type === "resistance") {
@@ -55,7 +56,7 @@ function renderWorkoutSummary(summary) {
     totalWeight: "Total Weight Lifted",
     totalSets: "Total Sets Performed",
     totalReps: "Total Reps Performed",
-    totalDistance: "Total Distance Covered"
+    totalDistance: "Total Distance Covered (miles)"
   };
 
   Object.keys(summary).forEach(key => {
